@@ -1,8 +1,7 @@
 #
-# Build mainnet image: docker build -t irita/irita .
-# Build testnet image: docker build -t irita/irita --build-arg NetworkType=testnet .
+# Build image: docker build -t bianjieai/irita .
 #
-FROM golang:1.13-alpine3.10 as builder
+FROM golang:1.15-alpine3.10 as builder
 
 # Set up dependencies
 ENV PACKAGES make gcc git libc-dev bash linux-headers eudev-dev
@@ -14,9 +13,6 @@ COPY . .
 
 # Install minimum necessary dependencies, run unit tests
 RUN apk add --no-cache $PACKAGES && make test-unit
-
-# Initialize network type, could be override via docker build argument `--build-arg NetworkType=testnet`
-ARG NetworkType=mainnet
 
 RUN make statik && make build
 
