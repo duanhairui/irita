@@ -226,8 +226,8 @@ SendStake=10000000000000${Stake}
 DataPath=/tmp
 
 Point=upoint
-PointOwner=PointOwner # replace with actual address
-PointToken={
+PointOwner=PointOwner // replace withz
+PointToken='{
           "symbol": "point",
           "name": "Irita point native token",
           "scale": 6,
@@ -236,7 +236,7 @@ PointToken={
           "max_supply": "1000000000000",
           "mintable": true,
           "owner": "${PointOwner}"
-        }
+        }'
 
 for i in `seq 0 $[ ${#DockerIP[*]} -1 ]`; do docker -H ${DockerIP[$i]} run -itd -e ChainCMD=$ChainCMD -e NodeName=${Names[$i]} -v $DataPath/$NodeName-$i:/root --name $NodeName-$i bianjie/irita:v2.0.0-alpha; done
 for i in `seq 0 $[ ${#DockerIP[*]} -1 ]`; do docker -H ${DockerIP[$i]} exec -it $NodeName-$i $ChainCMD version; done
@@ -251,12 +251,13 @@ docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i 's/127.0.0.1:26657/0.0.0.0:
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i 's/timeout_commit = "5s"/timeout_commit = "2s"/' /root/.$ChainCMD/config/config.toml
 
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/stake/$Point/g" /root/.$ChainCMD/config/genesis.json
-docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/、、\"base_token_denom\": \"$Point\"/\"base_token_denom\": \"$Stake\"/g" /root/.$ChainCMD/config/genesis.json
+docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/\"base_token_denom\": \"$Point\"/\"base_token_denom\": \"$Stake\"/g" /root/.$ChainCMD/config/genesis.json
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/node0token/$Stake/g" /root/.$ChainCMD/config/genesis.json
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/\"base_token_manager\": \"\"/\"base_token_manager\": \"$(echo 12345678 | $ChainCMD keys show validator | grep address | cut -b 12-)\"/" /root/.$ChainCMD/config/genesis.json
+docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/\"restricted_service_fee_denom\": false/\"restricted_service_fee_denom\": true/g" /root/.$ChainCMD/config/genesis.json
 
 # TODO: jq
-docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "226a，\n$PointToken" /root/.$ChainCMD/config/genesis.json
+docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "226a,\n$PointToken" /root/.$ChainCMD/config/genesis.json
 
 docker -H ${DockerIP[0]} exec -it $NodeName-0 bash -c 'sed -i "s/nodes\": \[/nodes\": \[{\"id\": \"$($ChainCMD tendermint show-node-id)\", \"name\": \"$NodeName\"}/" /root/.$ChainCMD/config/genesis.json'
 
