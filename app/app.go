@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 
 	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
@@ -163,9 +162,9 @@ func init() {
 		"uirita",
 		6,
 		2000000000,
-		0,
+		1000000000000,
 		true,
-		sdk.AccAddress(crypto.AddressHash([]byte(tokentypes.ModuleName))),
+		sdk.AccAddress{},
 	)
 }
 
@@ -410,7 +409,6 @@ func NewIritaApp(
 		banktypes.ModuleName,
 		slashingtypes.ModuleName,
 		crisistypes.ModuleName,
-		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		recordtypes.ModuleName,
 		tokentypes.ModuleName,
@@ -421,6 +419,7 @@ func NewIritaApp(
 		identitytypes.ModuleName,
 		wasm.ModuleName,
 		opb.ModuleName,
+		genutiltypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.crisisKeeper)

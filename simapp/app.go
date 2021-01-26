@@ -415,7 +415,6 @@ func NewSimApp(
 		// govtypes.ModuleName,
 		slashingtypes.ModuleName,
 		crisistypes.ModuleName,
-		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		recordtypes.ModuleName,
 		tokentypes.ModuleName,
@@ -426,6 +425,7 @@ func NewSimApp(
 		identitytypes.ModuleName,
 		wasm.ModuleName,
 		opb.ModuleName,
+		genutiltypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
