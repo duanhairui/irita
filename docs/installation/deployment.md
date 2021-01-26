@@ -220,10 +220,23 @@ NodeName=irita-node # node name
 DockerIP=(tcp://192.168.0.1 tcp://192.168.0.2 tcp://192.168.0.3 tcp://192.168.0.4)
 Names=("node0" "node1" "node2" "node3")
 Mnemonics=("") # mnemonics to import
-Stake=point
-TotalStake=1000000000000000${Stake} # total stake in genesis
-SendStake=100000000${Stake}
+Stake=uirita
+TotalStake=10000000000000000${Stake} # total stake in genesis
+SendStake=10000000000000${Stake}
 DataPath=/tmp
+
+Point=upoint
+PointOwner=PointOwner
+PointToken={
+          "symbol": "point",
+          "name": "Irita point native token",
+          "scale": 6,
+          "min_unit": "upoint",
+          "initial_supply": "1000000000",
+          "max_supply": "1000000000000",
+          "mintable": true,
+          "owner": "${PointOwner}"
+        }
 
 for i in `seq 0 $[ ${#DockerIP[*]} -1 ]`; do docker -H ${DockerIP[$i]} run -itd -e ChainCMD=$ChainCMD -e NodeName=${Names[$i]} -v $DataPath/$NodeName-$i:/root --name $NodeName-$i bianjie/irita:v2.0.0-alpha; done
 for i in `seq 0 $[ ${#DockerIP[*]} -1 ]`; do docker -H ${DockerIP[$i]} exec -it $NodeName-$i $ChainCMD version; done
@@ -236,9 +249,16 @@ for i in `seq 0 $[ ${#DockerIP[*]} -1 ]`; do docker -H ${DockerIP[$i]} exec -it 
 
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i 's/127.0.0.1:26657/0.0.0.0:26657/g' /root/.$ChainCMD/config/config.toml
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i 's/timeout_commit = "5s"/timeout_commit = "2s"/' /root/.$ChainCMD/config/config.toml
-docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/stake/$Stake/g" /root/.$ChainCMD/config/genesis.json
-docker -H ${DockerIP[0]} exec -it $NodeName-0 bash -c 'sed -i "s/owner\": \"iaa183rfa8tvtp6ax7jr7dfaf7ywv870sykxxykejp/owner\": \"$(echo 12345678 | $ChainCMD keys show validator | grep address | cut -b 12-)/" /root/.$ChainCMD/config/genesis.json'
+
+docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/stake/$Point/g" /root/.$ChainCMD/config/genesis.json
+docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/、、\"base_token_denom\": \"$Point\"/\"base_token_denom\": \"$Stake\"/g" /root/.$ChainCMD/config/genesis.json
+docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/node0token/$Stake/g" /root/.$ChainCMD/config/genesis.json
+
+# TODO: jq
+docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "226a，\n$PointToken" /root/.$ChainCMD/config/genesis.json
+
 docker -H ${DockerIP[0]} exec -it $NodeName-0 bash -c 'sed -i "s/nodes\": \[/nodes\": \[{\"id\": \"$($ChainCMD tendermint show-node-id)\", \"name\": \"$NodeName\"}/" /root/.$ChainCMD/config/genesis.json'
+
 docker -H ${DockerIP[0]} exec -it $NodeName-0 bash -c "$ChainCMD add-genesis-account \$(echo 12345678 | ${ChainCMD} keys show validator -a) ${TotalStake} --root-admin"
 docker -H ${DockerIP[0]} exec -it $NodeName-0 openssl ecparam -genkey -name SM2 -out /root/root.key
 docker -H ${DockerIP[0]} exec -it $NodeName-0 bash -c 'echo -e "CN\nSH\nSH\nIT\nDEV\n'${Names[0]}'\n\n" | openssl req -new -x509 -sm3 -sigopt "distid:1234567812345678" -key /root/root.key -out /root/root.crt -days 3650'
