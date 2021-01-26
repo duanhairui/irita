@@ -410,7 +410,6 @@ func NewIritaApp(
 		banktypes.ModuleName,
 		slashingtypes.ModuleName,
 		crisistypes.ModuleName,
-		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		recordtypes.ModuleName,
 		tokentypes.ModuleName,
@@ -421,6 +420,7 @@ func NewIritaApp(
 		identitytypes.ModuleName,
 		wasm.ModuleName,
 		opb.ModuleName,
+		genutiltypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.crisisKeeper)
