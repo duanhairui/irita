@@ -226,7 +226,7 @@ SendStake=10000000000000${Stake}
 DataPath=/tmp
 
 Point=upoint
-PointOwner=PointOwner // replace withz
+PointOwner=PointOwner # replace with actual address
 PointToken='{
           "symbol": "point",
           "name": "Irita point native token",
@@ -257,7 +257,7 @@ docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/\"base_token_manager\": 
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/\"restricted_service_fee_denom\": false/\"restricted_service_fee_denom\": true/g" /root/.$ChainCMD/config/genesis.json
 
 # TODO: jq
-docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "226a,\n$PointToken" /root/.$ChainCMD/config/genesis.json
+# docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "226a,\n$PointToken" /root/.$ChainCMD/config/genesis.json
 
 docker -H ${DockerIP[0]} exec -it $NodeName-0 bash -c 'sed -i "s/nodes\": \[/nodes\": \[{\"id\": \"$($ChainCMD tendermint show-node-id)\", \"name\": \"$NodeName\"}/" /root/.$ChainCMD/config/genesis.json'
 
