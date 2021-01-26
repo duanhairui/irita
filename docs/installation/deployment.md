@@ -226,7 +226,7 @@ SendStake=10000000000000${Stake}
 DataPath=/tmp
 
 Point=upoint
-PointOwner=PointOwner
+PointOwner=PointOwner # replace with actual address
 PointToken={
           "symbol": "point",
           "name": "Irita point native token",
@@ -253,6 +253,7 @@ docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i 's/timeout_commit = "5s"/ti
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/stake/$Point/g" /root/.$ChainCMD/config/genesis.json
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/、、\"base_token_denom\": \"$Point\"/\"base_token_denom\": \"$Stake\"/g" /root/.$ChainCMD/config/genesis.json
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/node0token/$Stake/g" /root/.$ChainCMD/config/genesis.json
+docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "s/\"base_token_manager\": \"\"/\"base_token_manager\": \"$(echo 12345678 | $ChainCMD keys show validator | grep address | cut -b 12-)\"/" /root/.$ChainCMD/config/genesis.json
 
 # TODO: jq
 docker -H ${DockerIP[0]} exec -it $NodeName-0 sed -i "226a，\n$PointToken" /root/.$ChainCMD/config/genesis.json
