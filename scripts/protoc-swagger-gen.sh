@@ -3,7 +3,7 @@
 set -eo pipefail
 
 
-IRISMOD_VERSION=v1.1.1-0.20210125143632-8fd979685071
+IRISMOD_VERSION=v1.1.1-0.20210126061310-7e1feb6f0ac7
 IRITAMOD_VERSION=v0.0.0-20210125115338-c52e28ce6cf7
 SDK_VERSION=v0.34.4-0.20210113022954-c0709d9ba13e
 WASMD_VERSION=v0.14.1-0.20210111145259-1acda43e5322
@@ -21,7 +21,7 @@ cp -r ${GOPATH}/pkg/mod/github.com/bianjieai/iritamod@${IRITAMOD_VERSION}/proto 
 cp -r ${GOPATH}/pkg/mod/github.com/bianjieai/cosmos-sdk@${SDK_VERSION}/proto/cosmos ./proto
 cp -r ${GOPATH}/pkg/mod/github.com/!cosm!wasm/wasmd@${WASMD_VERSION}/${WASMD_PROTO_DIR}/*.proto ./proto/wasm
 
-sed -i "" "s@${WASMD_PROTO_DIR}@wasm@g" `grep -rl "${WASMD_PROTO_DIR}" ./proto/wasm`
+#sed -i "" "s@${WASMD_PROTO_DIR}@wasm@g" `grep -rl "${WASMD_PROTO_DIR}" ./proto/wasm`
 mkdir -p ./tmp-swagger-gen
 
 proto_dirs=$(find ./proto -path './proto/cosmos/base/tendermint*' -prune -o -name 'query.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
