@@ -142,7 +142,6 @@ var (
 		tokentypes.ModuleName:               {authtypes.Minter, authtypes.Burner},
 		servicetypes.DepositAccName:         nil,
 		servicetypes.RequestAccName:         nil,
-		opbtypes.BaseTokenFeeCollectorName:  nil,
 		opbtypes.PointTokenFeeCollectorName: nil,
 	}
 

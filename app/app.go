@@ -136,7 +136,6 @@ var (
 		tokentypes.ModuleName:               {authtypes.Minter, authtypes.Burner},
 		servicetypes.DepositAccName:         nil,
 		servicetypes.RequestAccName:         nil,
-		opbtypes.BaseTokenFeeCollectorName:  nil,
 		opbtypes.PointTokenFeeCollectorName: nil,
 	}
 
@@ -300,7 +299,7 @@ func NewIritaApp(
 
 	app.serviceKeeper = servicekeeper.NewKeeper(
 		appCodec, keys[servicetypes.StoreKey], app.accountKeeper, app.bankKeeper,
-		app.GetSubspace(servicetypes.ModuleName), opbtypes.BaseTokenFeeCollectorName,
+		app.GetSubspace(servicetypes.ModuleName), opbtypes.PointTokenFeeCollectorName,
 	)
 
 	app.oracleKeeper = oraclekeeper.NewKeeper(
