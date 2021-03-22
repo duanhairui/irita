@@ -1,6 +1,7 @@
 package app
 
 import (
+	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	tokentypes "github.com/irisnet/irismod/modules/token/types"
 	"github.com/tendermint/tendermint/crypto"
@@ -100,7 +101,9 @@ func setGenesis(iapp *IritaApp) error {
 		permGenState.RoleAccounts,
 		perm.RoleAccount{
 			Address: rootAdmin.String(),
-			Roles:   []perm.Role{perm.RoleRootAdmin},
+			Roles:   &permtypes.RoleSet{
+				[]perm.Role{perm.RoleRootAdmin},
+			},
 		},
 	)
 	permGenStateBz := iapp.cdc.MustMarshalJSON(permGenState)

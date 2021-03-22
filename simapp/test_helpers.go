@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	"strconv"
 	"testing"
 	"time"
@@ -68,7 +69,9 @@ func Setup(isCheckTx bool) *SimApp {
 		permGenState.RoleAccounts = append(permGenState.RoleAccounts,
 			perm.RoleAccount{
 				Address: sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))).String(),
-				Roles:   []perm.Role{perm.RoleRootAdmin},
+				Roles:   &permtypes.RoleSet{
+					[]perm.Role{perm.RoleRootAdmin},
+				},
 			})
 		permGenStateBz := app.cdc.MustMarshalJSON(permGenState)
 		genesisState[perm.ModuleName] = permGenStateBz

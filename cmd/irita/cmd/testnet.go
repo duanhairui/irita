@@ -6,6 +6,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	"io/ioutil"
 	"math"
 	"net"
@@ -372,7 +373,9 @@ func initGenFiles(
 			permGenState.RoleAccounts,
 			perm.RoleAccount{
 				Address: account.GetAddress().String(),
-				Roles:   []perm.Role{perm.RoleRootAdmin},
+				Roles:   &permtypes.RoleSet{
+					[]perm.Role{perm.RoleRootAdmin},
+				},
 			},
 		)
 	}

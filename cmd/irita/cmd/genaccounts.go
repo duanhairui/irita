@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 
 	"github.com/bianjieai/iritamod/modules/perm"
 	"github.com/spf13/cobra"
@@ -150,7 +151,9 @@ func AddGenesisAccountCmd(defaultNodeHome string, defaultCliHome string) *cobra.
 					permGenState.RoleAccounts,
 					perm.RoleAccount{
 						Address: addr.String(),
-						Roles:   []perm.Role{perm.RoleRootAdmin},
+						Roles:   &permtypes.RoleSet{
+							[]perm.Role{perm.RoleRootAdmin},
+						},
 					},
 				)
 			}
